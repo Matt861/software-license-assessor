@@ -1,10 +1,9 @@
 # match_scanner.py
 from typing import Dict, List, Union
-
 from assessment.scanner.utils import to_text
+from configuration import Configuration as Config
 from input.file_search_strings import copyright_matches, license_matches, prohibitive_matches, general_matches, \
     export_matches, custom_search_matches
-import main
 
 ALL_MATCH_LISTS: Dict[str, List[str]] = {
     "copyright": copyright_matches,
@@ -45,7 +44,7 @@ def _find_matches_in_content(content: Union[str, bytes]) -> Dict[str, List[str]]
 
 
 def scan_all_files_for_matches():
-    for file_data in main.file_data_manager.get_all_file_data():
+    for file_data in Config.file_data_manager.get_all_file_data():
         file_matches = _find_matches_in_content(file_data.file_content)
         if file_matches:
             file_data.keyword_matches = file_matches

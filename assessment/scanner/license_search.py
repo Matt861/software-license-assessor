@@ -1,10 +1,9 @@
 # pattern_search.py
 import os
-import re
 from pathlib import Path
 from typing import Dict, List
 from assessment.scanner import utils
-import main
+from configuration import Configuration as Config
 
 
 def load_license_texts(license_dirs: List[Path]) -> Dict[Path, str]:
@@ -50,7 +49,7 @@ def load_license_texts(license_dirs: List[Path]) -> Dict[Path, str]:
     return licenses
 
 
-def search_full_license_text_in_files(licenses: Dict[Path, str],):
+def search_full_license_text_in_files():
     """
     For each pattern (full text from a pattern file), check whether it
     appears in any of the iterated files stored as FileData instances.
@@ -65,6 +64,8 @@ def search_full_license_text_in_files(licenses: Dict[Path, str],):
     non-empty lists. Patterns with no matches will have an empty list.
     """
 
+    licenses = load_license_texts(Config.all_licenses_dir)
+
     # Pre-normalize all patterns once
     normalized_licenses: Dict[Path, str] = {
         path: utils.normalize_without_empty_lines_and_dates(text)
@@ -72,7 +73,7 @@ def search_full_license_text_in_files(licenses: Dict[Path, str],):
     }
 
     # Iterate over all files you've already read into FileData
-    for file_data in main.file_data_manager.get_all_file_data():
+    for file_data in Config.file_data_manager.get_all_file_data():
         file_text = utils.to_text(file_data.file_content)
         normalized_file_text = utils.normalize_without_empty_lines_and_dates(file_text)
         license_matches = Dict[str, str]

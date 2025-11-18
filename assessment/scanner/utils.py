@@ -1,8 +1,7 @@
 import os
 import re
 from pathlib import Path
-from typing import Union
-
+from typing import Union, Callable
 
 _YEAR_OR_RANGE_RE = re.compile(
     r"\b(19|20)\d{2}(?:\s*[-–]\s*(19|20)\d{2})?\b"
@@ -93,3 +92,32 @@ def to_backslash_path(path: str) -> str:
     p = Path(path)
     # Get the string form and replace any forward slashes with backslashes
     return str(p).replace("/", "\\")
+
+
+def read_file_to_string(file_path: str) -> str:
+    """Read the entire contents of a text file into a single string."""
+    with open(file_path, "r", encoding="utf-8") as f:
+        return f.read()
+
+
+def placeholder_to_regex(text: str) -> str:
+    """
+    Converts placeholders in license_text to regex patterns.
+    Recognizes placeholders like [yyyy], [year], [name of copyright owner], <year>, <name of author>, etc.
+    """
+    text = normalize_without_empty_lines_and_dates(text)
+    # Replace [yyyy], [year], <year> with a year pattern (4 digits)
+    text = re.sub(r"(\[yyyy\]|\[year\]|<year>)", r"\\d{4}", text)
+    # Replace [name of copyright owner], <name of copyright owner>, <name of author>, etc. with any non-newline pattern
+    text = re.sub(r"(\[name of copyright owner\]|<name of copyright owner>|<name of author>)", r".+?", text)
+    # Remove the literal strings <!-- and -->
+    text = re.sub(r'<!--|-->', '', text)
+    # Replace generic bracket or angle placeholders: [.*?] or <.*?>
+    text = re.sub(r"\[[^\[\]]+?\]", r".+?", text)
+    text = re.sub(r"<[^<>]+?>", r".+?", text)
+    # Escape special regex characters except for our replacements
+    text = re.escape(text)
+    # Unescape the regex patterns we inserted
+    text = text.replace(r"\d{4}", r"\d{4}").replace(r"\.\+\?", r".+?")
+
+    return text

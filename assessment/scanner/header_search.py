@@ -1,9 +1,14 @@
 import re
 
-import main
+from assessment.scanner.utils import normalize_without_empty_lines_and_dates
+from configuration import Configuration as Config
 
 
-def _detect_file_header(file_data):
+#def check_if_header_is_license():
+
+
+
+def detect_file_header(file_data):
     """
     Determines if the given file content contains a header and retrieves it.
     Handles source code, markup, and text-based file types.
@@ -14,6 +19,7 @@ def _detect_file_header(file_data):
 
     Returns:
         (bool, str|None): Tuple (has_header, header_text). header_text is None if no header is found.
+        :param file_data:
     """
 
     lines = file_data.file_content.strip().splitlines()
@@ -104,5 +110,5 @@ def _detect_file_header(file_data):
 
 
 def scan_all_files_for_headers():
-    for file_data in main.file_data_manager.get_all_file_data():
-        _detect_file_header(file_data)
+    for file_data in Config.file_data_manager.get_all_file_data():
+        detect_file_header(file_data)

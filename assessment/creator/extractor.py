@@ -1,18 +1,9 @@
 #!/usr/bin/env python3
-
 import os
 import shutil
 from pathlib import Path
 from assessment.creator import archive_extractor, compression_extractor
 from configuration import Configuration as Config
-
-
-def is_ignored_dir(src_dir: Path) -> bool:
-    src_dir_str = str(src_dir)
-    for ignore_dir in Config.ignore_dirs:
-        if ignore_dir in str(src_dir_str):
-            return True
-    return False
 
 
 def classify(path: Path) -> str:
@@ -66,9 +57,6 @@ def copy_tree_with_extraction(src: Path, dest_root: Path) -> None:
         dirpath = Path(dirpath)
         rel_dir = dirpath.relative_to(src)
 
-        if is_ignored_dir(dirpath):
-            continue
-
         for filename in filenames:
             src_file = dirpath / filename
 
@@ -95,9 +83,6 @@ def extract_nested_archives(dest_root: Path) -> None:
 
         for dirpath, dirnames, filenames in os.walk(dest_root):
             dirpath = Path(dirpath)
-
-            if is_ignored_dir(dirpath):
-                continue
 
             for filename in filenames:
                 abs_path = dirpath / filename

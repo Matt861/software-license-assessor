@@ -1,6 +1,5 @@
 import shutil
 from pathlib import Path
-from main import file_data_manager
 from configuration import Configuration as Config
 
 
@@ -29,7 +28,7 @@ def copy_unresolved_files(src_path) -> None:
         if file_path.is_file():
             if is_ignored_dir(file_path):
                 continue
-            file_data = file_data_manager.get_file_data(file_path)
+            file_data = Config.file_data_manager.get_file_data(file_path)
             if file_data:
                 if not file_data.header_matches:
                     # Preserve directory structure under dst_dir

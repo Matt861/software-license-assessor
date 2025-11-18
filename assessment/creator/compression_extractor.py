@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-
 import shutil
 import gzip
 import bz2
 import lzma
 from pathlib import Path
-
 
 
 def is_single_compressed(path: Path) -> bool:

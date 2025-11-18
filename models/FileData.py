@@ -9,6 +9,7 @@ class FileData:
         self._keyword_matches = None
         self._license_matches = None
         self._header_matches = None
+        self._header_is_license = False
         # self._header_data = header_data if header_data is not None else []
         # self._file_entry = file_entry if file_entry is not None else []
         # self._file_search_data = file_search_data if file_search_data is not None else []
@@ -66,6 +67,14 @@ class FileData:
     @header_matches.setter
     def header_matches(self, header_matches):
         self._header_matches = header_matches
+
+    @property
+    def header_is_license(self):
+        return self._header_is_license
+
+    @header_is_license.setter
+    def header_is_license(self, header_is_license):
+        self._header_is_license = header_is_license
     #
     # @property
     # def header_data(self):

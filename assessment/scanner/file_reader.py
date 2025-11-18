@@ -2,8 +2,8 @@ import os
 from pathlib import Path
 from typing import Union
 from assessment.scanner import utils
-import main
 from models.FileData import FileData
+from configuration import Configuration as Config
 
 
 def read_all_files_in_directory(root_dir):
@@ -33,4 +33,4 @@ def read_all_files_in_directory(root_dir):
 
             file_extension = utils.get_file_extension(file_path)
             file_data = FileData(file_path, content, file_extension)
-            main.file_data_manager.add_file_data(file_data)
+            Config.file_data_manager.add_file_data(file_data)
