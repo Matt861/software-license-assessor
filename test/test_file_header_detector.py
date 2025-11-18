@@ -4,7 +4,8 @@ from pathlib import Path
 from assessment.scanner.file_reader import read_all_files_in_directory
 from assessment.scanner.utils import read_file_to_string, placeholder_to_regex
 from configuration import Configuration as Config
-from assessment.scanner.header_search import detect_file_header
+from assessment.scanner.header_search import (detect_file_header, detect_c_style_header,
+                                              detect_xml_html_file_header)
 from models.FileData import FileData
 
 p = Path(__file__).resolve()
@@ -25,6 +26,32 @@ class TestFileHeaderDetector(unittest.TestCase):
         if license_header_text_stripped in header_text_stripped:
             print('FOUND IT')
         print('Done')
+
+
+    def test_detect_java_file_header(self):
+        file_path = Path("input/JoranConfiguratorBase.java").resolve()
+        read_all_files_in_directory(Path("input").resolve())
+        file_data = Config.file_data_manager.get_file_data(file_path)
+        java_header = detect_c_style_header(file_data)
+        print(java_header)
+        file_path = Path("input/JoranConfiguratorBase2.java").resolve()
+        file_data = Config.file_data_manager.get_file_data(file_path)
+        java_header = detect_c_style_header(file_data)
+        print(java_header)
+        print('Done')
+
+    def test_detect_xml_and_html_file_header(self):
+        read_all_files_in_directory(Path("input/files_with_headers").resolve())
+        file_path = Path("input/files_with_headers/example.xml").resolve()
+        file_data = Config.file_data_manager.get_file_data(file_path)
+        xml_header = detect_xml_html_file_header(file_data)
+        print(xml_header)
+        file_path = Path("input/files_with_headers/example.html").resolve()
+        file_data = Config.file_data_manager.get_file_data(file_path)
+        html_header = detect_xml_html_file_header(file_data)
+        print(html_header)
+        print('Done')
+
 
 if __name__ == "__main__":
     unittest.main()

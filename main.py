@@ -4,8 +4,9 @@ from assessment.timer import Timer
 from assessment.creator import extractor
 from assessment.review import file_gen, data_gen
 from assessment import print_utils
-from assessment.scanner import file_reader, keyword_search, license_search, header_search, license_to_header_matcher
 from configuration import Configuration as Config
+from assessment.scanner import (file_reader, keyword_search, license_search, header_search, license_to_header_matcher,
+                                file_release_search)
 
 p = Path(__file__).resolve()
 
@@ -17,6 +18,7 @@ def main() -> None:
     Config.dest_dir.mkdir(parents=True, exist_ok=True)
     extractor.main(Config.source_dir, Config.dest_dir)
     file_reader.read_all_files_in_directory(Config.dest_dir)
+    file_release_search.scan_all_files()
     keyword_search.scan_all_files_for_matches()
     license_search.search_full_license_text_in_files()
     header_search.scan_all_files_for_headers()

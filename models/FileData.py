@@ -11,6 +11,7 @@ class FileData:
         self._header_matches = None
         self._header_is_license = False
         self._license_name = None
+        self._is_released = False
         # self._header_data = header_data if header_data is not None else []
         # self._file_entry = file_entry if file_entry is not None else []
         # self._file_search_data = file_search_data if file_search_data is not None else []
@@ -84,6 +85,14 @@ class FileData:
     @license_name.setter
     def license_name(self, license_name):
         self._license_name = license_name
+
+    @property
+    def is_released(self):
+        return self._is_released
+
+    @is_released.setter
+    def is_released(self, is_released):
+        self._is_released = is_released
     #
     # @property
     # def header_data(self):
