@@ -54,6 +54,6 @@ def print_license_header_matches():
     for file_data in Config.file_data_manager.get_all_file_data():
         if file_data.header_matches and file_data.header_is_license:
             file_header_license_match_count += 1
-            print(f"{"File name: "}{file_data.file_path}")
-            #print(f"{"Header that matches license: "}{file_data.header_matches}")
+            #print(f"{"File name: "}{file_data.file_path}")
+            #print(f"{"License name: "}{file_data.license_name}")
     print(f"{"Total files with header that matches license: "}{file_header_license_match_count}")

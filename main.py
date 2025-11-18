@@ -2,7 +2,7 @@
 from pathlib import Path
 from assessment.timer import Timer
 from assessment.creator import extractor
-from assessment.review import file_gen
+from assessment.review import file_gen, data_gen
 from assessment import print_utils
 from assessment.scanner import file_reader, keyword_search, license_search, header_search, license_to_header_matcher
 from configuration import Configuration as Config
@@ -26,6 +26,7 @@ def main() -> None:
     # ADD LOGIC TO MANUALLY EXCLUDE/INFER INDIVIDUAL FILES
 
     file_gen.copy_unresolved_files(Config.dest_dir)
+    data_gen.write_license_data_to_csv("assessment_data.csv")
 
 
 

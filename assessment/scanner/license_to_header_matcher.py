@@ -63,8 +63,10 @@ def search_file_data_headers_for_licenses():
                     file_data_header_normalized = utils.placeholder_to_regex(file_data.header_matches)
                     if license_header_text in file_data_header_normalized:
                         file_data.header_is_license = True
+                        file_data.license_name = utils.get_file_name_from_path_without_extension(license_header_path)
                     elif file_data_header_normalized in license_header_text and file_data_header_normalized != '.+?':
                         file_data.header_is_license = True
+                        file_data.license_name = utils.get_file_name_from_path_without_extension(license_header_path)
 
 
 
