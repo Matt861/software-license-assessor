@@ -10,6 +10,7 @@ class FileData:
         self._keyword_matches = None
         self._license_matches = None
         self._header_is_license = False
+        self._file_is_license = False
         self._license_name = None
         self._is_released = False
         self._exact_license_match = None
@@ -78,6 +79,14 @@ class FileData:
     @header_is_license.setter
     def header_is_license(self, header_is_license):
         self._header_is_license = header_is_license
+
+    @property
+    def file_is_license(self):
+        return self._file_is_license
+
+    @file_is_license.setter
+    def file_is_license(self, file_is_license):
+        self._file_is_license = file_is_license
 
     @property
     def license_name(self):

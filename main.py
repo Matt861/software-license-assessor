@@ -20,6 +20,7 @@ def main() -> None:
     file_reader.read_all_files_in_directory(Config.dest_dir)
     file_release_search.scan_all_files()
     license_search.search_full_license_text_in_files()
+    # SEARCH FULL HEADER TEXT IN FILE, SOME FILES ARE ONLY THE HEADER LICENSE TEXT WITHOUT A HEADER (output/review/logback-v_1.5.21/logback-core-blackbox/LICENSE.txt)
     header_search.scan_all_files_for_headers()
     license_to_header_matcher.search_file_data_headers_for_licenses()
     keyword_search.scan_all_files_for_matches()
@@ -31,6 +32,7 @@ def main() -> None:
     # ADD LOGIC TO MANUALLY EXCLUDE/INFER INDIVIDUAL FILES
     # ADD LOGIC TO CREATE FINALIZED ASSESSMENT TO USE FOR DIFF COMPARE
     # DIFF COMPARE SHOULD OUTPUT TOTAL NUMBER OF NEW FILES AND NUMBER OF FILES CHANGED
+    # ASSIGN LICENSES VALUES OF PERMISSIBLE AND IMPERMISSIBLE
 
     file_gen.copy_unresolved_files(Config.dest_dir)
     data_gen.write_license_data_to_csv("assessment_data.csv")
