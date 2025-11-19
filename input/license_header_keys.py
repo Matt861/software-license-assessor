@@ -88,7 +88,7 @@ dual_license_keys = {
     "Eclipse-1.0/LGPL-2.1": ["Eclipse Public License v1.0", "GNU Lesser General Public License version 2.1"]
 }
 
-multi_key_licenses = {
+multi_license_keys = {
     "GPL-2.0-with-autoconf-exception": ["GNU General Public License v2.0 w/Autoconf exception", "GPL-2.0-with-autoconf-exception"],
     "GPL-2.0-with-bison-exception": ["GNU General Public License v2.0 w/Bison exception", "GPL-2.0-with-bison-exception"],
     "GPL-2.0-with-classpath-exception": ["GNU General Public License v2.0 w/Classpath exception", "GPL-2.0-with-classpath-exception"],
@@ -98,7 +98,7 @@ multi_key_licenses = {
     "GPL-3.0-with-GCC-exception": ["GNU General Public License v3.0 w/GCC Runtime Library exception", "GPL-3.0-with-GCC-exception"]
 }
 
-multi_key_licenses_inclusive = {
+multi_license_inclusive_keys = {
     "GPL-2.0-with-autoconf-exception": ["GNU General Public License", "version 2", "Autoconf", "Exception"],
     "GPL-2.0-with-bison-exception": ["GNU General Public License", "version 2", "Bison", "Exception"],
     "GPL-2.0-with-classpath-exception": ["GNU General Public License", "version 2", "Classpath", "Exception"],

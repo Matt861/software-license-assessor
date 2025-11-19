@@ -128,13 +128,13 @@ def search_file_data_headers_for_licenses():
                     file_data.license_name = license_name
                     break
             if not file_data.license_name:
-                for license_name, license_identifiers in license_header_keys.multi_key_licenses.items():
+                for license_name, license_identifiers in license_header_keys.multi_license_keys.items():
                     if any(identifier.lower() in file_header for identifier in license_identifiers):
                         file_data.header_is_license = True
                         file_data.license_name = license_name
                         break
             if not file_data.license_name:
-                for license_name, license_identifiers in license_header_keys.multi_key_licenses_inclusive.items():
+                for license_name, license_identifiers in license_header_keys.multi_license_inclusive_keys.items():
                     if all(identifier.lower() in file_header for identifier in license_identifiers):
                         file_data.header_is_license = True
                         file_data.license_name = license_name

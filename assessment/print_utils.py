@@ -49,6 +49,16 @@ def print_header_and_keyword_matches():
     print(f"{"Total files with header and keyword matches: "}{file_header_and_keyword_match_count}")
 
 
+def print_keyword_matches_without_header_matches():
+    file_keyword_match_count = 0
+    for file_data in Config.file_data_manager.get_all_file_data():
+        if not file_data.header_is_license and file_data.keyword_matches:
+            file_keyword_match_count += 1
+            print(f"{"File name: "}{file_data.file_path}")
+            print(f"{"Keyword matches: "}{file_data.keyword_matches}")
+    print(f"{"Total files with keyword matches but no header match: "}{file_keyword_match_count}")
+
+
 def print_license_header_matches():
     file_header_license_match_count = 0
     for file_data in Config.file_data_manager.get_all_file_data():

@@ -45,6 +45,7 @@ if __name__ == "__main__":
     # print_utils.print_header_matches()
     # print_utils.print_header_and_keyword_matches()
     print_utils.print_license_header_matches()
+    print_utils.print_keyword_matches_without_header_matches()
     print_utils.print_total_file_count(Config.dest_dir, True)
 
     timer.stop()
