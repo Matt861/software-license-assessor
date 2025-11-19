@@ -19,10 +19,10 @@ def main() -> None:
     extractor.main(Config.source_dir, Config.dest_dir)
     file_reader.read_all_files_in_directory(Config.dest_dir)
     file_release_search.scan_all_files()
-    keyword_search.scan_all_files_for_matches()
     license_search.search_full_license_text_in_files()
     header_search.scan_all_files_for_headers()
     license_to_header_matcher.search_file_data_headers_for_licenses()
+    keyword_search.scan_all_files_for_matches()
     # FULL LICENSE OR FULL HEADER MATCHES = EXACT LICENSE MATCH
     # HEADER MATCH = STRONG MATCH
     # KEYWORD MATCH = WEAK MATCH
