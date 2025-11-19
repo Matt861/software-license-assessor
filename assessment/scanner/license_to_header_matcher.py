@@ -120,8 +120,8 @@ def load_normalized_license_header_texts(normalized_license_header_dirs: List[Pa
 
 def search_file_data_headers_for_licenses():
     for file_data in Config.file_data_manager.get_all_file_data():
-        if file_data.header_matches:
-            file_header = str(file_data.header_matches).lower()
+        if file_data.file_header:
+            file_header = str(file_data.file_header).lower()
             for license_name, license_identifiers in license_header_keys.dual_license_keys.items():
                 if all(identifier.lower() in file_header for identifier in license_identifiers):
                     file_data.header_is_license = True
@@ -154,12 +154,12 @@ def search_file_data_headers_for_licenses2():
     normalized_license_headers = load_normalized_license_header_texts(Config.all_license_headers_normalized_dir)
 
     for file_data in Config.file_data_manager.get_all_file_data():
-        if file_data.header_matches:
+        if file_data.file_header:
             for license_header_path, license_header_text in normalized_license_headers.items():
                 if license_header_text:
                     # if "compress2.txt" in str(file_data.file_path):
                     #     print('found it')
-                    file_data_header_normalized = utils.placeholder_to_regex(file_data.header_matches)
+                    file_data_header_normalized = utils.placeholder_to_regex(file_data.file_header)
                     if license_header_text in file_data_header_normalized:
                         file_data.header_is_license = True
                         file_data.license_name = utils.get_file_name_from_path_without_extension(license_header_path)

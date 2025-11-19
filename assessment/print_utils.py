@@ -33,26 +33,26 @@ def print_license_matches():
 def print_header_matches():
     file_header_match_count = 0
     for file_data in Config.file_data_manager.get_all_file_data():
-        if file_data.header_matches:
+        if file_data.file_header:
             file_header_match_count += 1
-            print(f"{"Header matches: "}{file_data.header_matches}")
+            print(f"{"Header matches: "}{file_data.file_header}")
     print(f"{"Total files with header matches: "}{file_header_match_count}")
 
 
 def print_header_and_keyword_matches():
     file_header_and_keyword_match_count = 0
     for file_data in Config.file_data_manager.get_all_file_data():
-        if file_data.header_matches and file_data.keyword_matches:
+        if file_data.file_header and file_data.keyword_matches:
             file_header_and_keyword_match_count += 1
             print(f"{"File name: "}{file_data.file_path}")
-            print(f"{"Header and keyword matches: "}{file_data.header_matches}")
+            print(f"{"Header and keyword matches: "}{file_data.file_header}")
     print(f"{"Total files with header and keyword matches: "}{file_header_and_keyword_match_count}")
 
 
 def print_license_header_matches():
     file_header_license_match_count = 0
     for file_data in Config.file_data_manager.get_all_file_data():
-        if file_data.header_matches and file_data.header_is_license:
+        if file_data.file_header and file_data.header_is_license:
             file_header_license_match_count += 1
             #print(f"{"File name: "}{file_data.file_path}")
             #print(f"{"License name: "}{file_data.license_name}")

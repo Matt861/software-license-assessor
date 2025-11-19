@@ -6,12 +6,13 @@ class FileData:
         self._file_path = file_path
         self._file_content = file_content
         self._file_extension = file_extension
+        self._file_header = None
         self._keyword_matches = None
         self._license_matches = None
-        self._header_matches = None
         self._header_is_license = False
         self._license_name = None
         self._is_released = False
+        self._exact_license_match = None
         # self._header_data = header_data if header_data is not None else []
         # self._file_entry = file_entry if file_entry is not None else []
         # self._file_search_data = file_search_data if file_search_data is not None else []
@@ -47,6 +48,14 @@ class FileData:
         self._file_extension = file_extension
 
     @property
+    def file_header(self):
+        return self._file_header
+
+    @file_header.setter
+    def file_header(self, header_matches):
+        self._file_header = header_matches
+
+    @property
     def keyword_matches(self):
         return self._keyword_matches
 
@@ -61,14 +70,6 @@ class FileData:
     @license_matches.setter
     def license_matches(self, license_matches):
         self._license_matches = license_matches
-
-    @property
-    def header_matches(self):
-        return self._header_matches
-
-    @header_matches.setter
-    def header_matches(self, header_matches):
-        self._header_matches = header_matches
 
     @property
     def header_is_license(self):

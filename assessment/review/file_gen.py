@@ -30,7 +30,7 @@ def copy_unresolved_files(src_path) -> None:
                 continue
             file_data = Config.file_data_manager.get_file_data(file_path)
             if file_data:
-                if not file_data.header_matches:
+                if not file_data.file_header:
                     # Preserve directory structure under dst_dir
                     rel_path = file_path.relative_to(src_path)
                     target_path = dst_path / rel_path

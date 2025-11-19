@@ -32,7 +32,7 @@ def detect_file_header(file_data):
     if ext == "csv":
         first_row = lines[0].strip()
         if any(not re.match(r'^-?\d+(\.\d+)?$', cell.strip()) for cell in first_row.split(",")):
-            file_data.header_matches = first_row
+            file_data.file_header = first_row
             return
 
     # Text, Markdown: Non-empty first line or Markdown header
@@ -40,10 +40,10 @@ def detect_file_header(file_data):
         first_line = lines[0].strip()
         if ext == "md":
             if first_line.startswith("#"):
-                file_data.header_matches = first_line
+                file_data.file_header = first_line
                 return
         if first_line:
-            file_data.header_matches = first_line
+            file_data.file_header = first_line
             return
 
     # Python (.py): Triple-quoted docstring, or top block of comments (#)
@@ -55,13 +55,13 @@ def detect_file_header(file_data):
                 header_lines.append(line)
                 if line.strip().endswith(quote):
                     break
-            file_data.header_matches = "\n".join(header_lines)
+            file_data.file_header = "\n".join(header_lines)
             return
         i = 0
         while i < len(lines) and lines[i].strip().startswith("#"):
             i += 1
         if i > 0:
-            file_data.header_matches = "\n".join(lines[:i])
+            file_data.file_header = "\n".join(lines[:i])
             return
 
     # Java, JS, TS, C, CPP, CSS, SH: Block comments at top (/* ... */ or //...), or # for sh
@@ -73,21 +73,21 @@ def detect_file_header(file_data):
                 header_lines.append(line)
                 if "*/" in line:
                     break
-            file_data.header_matches = "\n".join(header_lines)
+            file_data.file_header = "\n".join(header_lines)
             return
         # Check for contiguous // at top
         i = 0
         while i < len(lines) and lines[i].strip().startswith("//"):
             i += 1
         if i > 0:
-            file_data.header_matches = "\n".join(lines[:i])
+            file_data.file_header = "\n".join(lines[:i])
             return
     if ext == "sh":
         i = 0
         while i < len(lines) and lines[i].strip().startswith("#"):
             i += 1
         if i > 0:
-            file_data.header_matches = "\n".join(lines[:i])
+            file_data.file_header = "\n".join(lines[:i])
             return
 
     # XML, HTML: <!-- ... --> block at top
@@ -98,7 +98,7 @@ def detect_file_header(file_data):
                 header_lines.append(line)
                 if "-->" in line:
                     break
-            file_data.header_matches = "\n".join(header_lines)
+            file_data.file_header = "\n".join(header_lines)
             return
 
     # Fallback: first non-empty line as potential header
@@ -163,7 +163,7 @@ def detect_c_style_file_header(file_data: FileData) -> Optional[str]:
                 break
             i += 1
         # Even if "*/" is never found, treat gathered lines as header
-        file_data.header_matches = "\n".join(header_lines)
+        file_data.file_header = "\n".join(header_lines)
         return "\n".join(header_lines)
 
     # 4) Line comment header: one or more // lines at the top
@@ -173,7 +173,7 @@ def detect_c_style_file_header(file_data: FileData) -> Optional[str]:
             header_lines.append(lines[i])
             i += 1
         if header_lines:
-            file_data.header_matches = "\n".join(header_lines)
+            file_data.file_header = "\n".join(header_lines)
             return "\n".join(header_lines)
 
     # 5) Anything else at the top = no header
@@ -227,7 +227,7 @@ def detect_xml_style_file_header(file_data: FileData) -> Optional[str]:
 
             # If the closing --> is on the same line, we’re done
             if "-->" in stripped:
-                file_data.header_matches = "\n".join(header_lines)
+                file_data.file_header = "\n".join(header_lines)
                 return "\n".join(header_lines)
 
             # Otherwise, gather subsequent lines until we find -->
@@ -238,7 +238,7 @@ def detect_xml_style_file_header(file_data: FileData) -> Optional[str]:
                     break
                 i += 1
 
-            file_data.header_matches = "\n".join(header_lines)
+            file_data.file_header = "\n".join(header_lines)
             return "\n".join(header_lines)
 
         # If we reach any other tag/content before a comment, no header
@@ -303,7 +303,7 @@ def detect_python_style_file_header(file_data: FileData) -> Optional[str]:
     if not header_lines:
         return None
 
-    file_data.header_matches = "\n".join(header_lines)
+    file_data.file_header = "\n".join(header_lines)
     return "\n".join(header_lines)
 
 
@@ -354,7 +354,7 @@ def detect_csv_style_file_header(file_data: FileData) -> Optional[str]:
 
     # If we reach here, Sniffer thinks there is a header.
     # Return the first non-empty line exactly as it appears in the file.
-    file_data.header_matches = non_empty_lines[0]
+    file_data.file_header = non_empty_lines[0]
     return non_empty_lines[0]
 
 
@@ -398,7 +398,7 @@ def detect_txt_style_file_header(file_data: FileData, min_header_lines: int = 2)
 
     # 3) Decide if this block counts as a header
     if len(header_lines) >= min_header_lines:
-        file_data.header_matches = "\n".join(header_lines)
+        file_data.file_header = "\n".join(header_lines)
         return "\n".join(header_lines)
 
     return None
@@ -454,7 +454,7 @@ def detect_sh_style_file_header(file_data: FileData) -> Optional[str]:
     if not header_lines:
         return None
 
-    file_data.header_matches = "\n".join(header_lines)
+    file_data.file_header = "\n".join(header_lines)
     return "\n".join(header_lines)
 
 
