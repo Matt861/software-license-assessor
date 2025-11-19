@@ -2,8 +2,8 @@ import os
 import re
 from pathlib import Path
 from typing import Dict, List
-
 from assessment.scanner import utils
+from input import license_header_keys
 from configuration import Configuration as Config
 
 
@@ -118,8 +118,39 @@ def load_normalized_license_header_texts(normalized_license_header_dirs: List[Pa
 
 
 
-
 def search_file_data_headers_for_licenses():
+    for file_data in Config.file_data_manager.get_all_file_data():
+        if file_data.header_matches:
+            file_header = str(file_data.header_matches).lower()
+            for license_name, license_identifiers in license_header_keys.dual_license_keys.items():
+                if all(identifier.lower() in file_header for identifier in license_identifiers):
+                    file_data.header_is_license = True
+                    file_data.license_name = license_name
+                    break
+            if not file_data.license_name:
+                for license_name, license_identifiers in license_header_keys.multi_key_licenses.items():
+                    if any(identifier.lower() in file_header for identifier in license_identifiers):
+                        file_data.header_is_license = True
+                        file_data.license_name = license_name
+                        break
+            if not file_data.license_name:
+                for license_name, license_identifiers in license_header_keys.multi_key_licenses_inclusive.items():
+                    if all(identifier.lower() in file_header for identifier in license_identifiers):
+                        file_data.header_is_license = True
+                        file_data.license_name = license_name
+                        break
+            if not file_data.license_name:
+                for license_name, license_identifier in license_header_keys.license_keys.items():
+                    if license_identifier.lower() in file_header:
+                        file_data.header_is_license = True
+                        file_data.license_name = license_name
+
+
+
+
+
+
+def search_file_data_headers_for_licenses2():
     normalized_license_headers = load_normalized_license_header_texts(Config.all_license_headers_normalized_dir)
 
     for file_data in Config.file_data_manager.get_all_file_data():

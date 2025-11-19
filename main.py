@@ -23,6 +23,7 @@ def main() -> None:
     license_search.search_full_license_text_in_files()
     header_search.scan_all_files_for_headers()
     license_to_header_matcher.search_file_data_headers_for_licenses()
+    #license_to_header_matcher.search_file_data_headers_for_licenses()
     # DETERMINE IF HEADER IS A LICENSE
     # MOVE KEYWORD SEARCH TO HAPPEN HERE
     # ADD LOGIC TO MANUALLY EXCLUDE/INFER INDIVIDUAL FILES

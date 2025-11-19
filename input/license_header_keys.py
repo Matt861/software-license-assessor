@@ -1,4 +1,4 @@
-license_header_keys = {
+license_keys = {
     "AFL-1.1": "Academic Free License version 1.1",
     "AFL-1.2": "Academic Free License version 1.2",
     "AFL-2.0": "Academic Free License version 2.0",
@@ -98,11 +98,11 @@ multi_key_licenses = {
     "GPL-3.0-with-GCC-exception": ["GNU General Public License v3.0 w/GCC Runtime Library exception", "GPL-3.0-with-GCC-exception"]
 }
 
-multi_key_inclusive_licenses = {
+multi_key_licenses_inclusive = {
     "GPL-2.0-with-autoconf-exception": ["GNU General Public License", "version 2", "Autoconf", "Exception"],
-    "GPL-2.0-with-bison-exception": ["", ""],
-    "GPL-2.0-with-classpath-exception": ["", ""],
-    "GPL-2.0-with-font-exception": ["", ""],
+    "GPL-2.0-with-bison-exception": ["GNU General Public License", "version 2", "Bison", "Exception"],
+    "GPL-2.0-with-classpath-exception": ["GNU General Public License", "version 2", "Classpath", "Exception"],
+    "GPL-2.0-with-font-exception": ["GNU General Public License", "version 2", "Font", "Exception"],
     "GPL-2.0-with-GCC-exception": ["GNU General Public License", "version 2", "GCC", "Exception"],
     "GPL-3.0-with-autoconf-exception": ["GNU General Public License", "version 3", "Autoconf", "Exception"],
     "GPL-3.0-with-GCC-exception": ["GNU General Public License", "version 3", "GCC", "Exception"]
