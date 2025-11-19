@@ -1,9 +1,77 @@
 import os
+import re
 from pathlib import Path
 from typing import Dict, List
 
 from assessment.scanner import utils
 from configuration import Configuration as Config
+
+
+# Regexes to detect year ranges and single years
+YEAR_RANGE_RE = re.compile(r'\b(19|20)\d{2}\s*[-–]\s*(19|20)\d{2}\b')
+YEAR_SINGLE_RE = re.compile(r'\b(19|20)\d{2}\b')
+
+
+def normalize_c_style_file_header(header: str) -> str:
+    """
+    Remove Java block comment markers, line comment prefixes, and leading '*'
+    characters, then normalize whitespace so the raw text can be compared.
+    Handles both:
+      - /** ... */ style
+      - // ... style
+    """
+    lines = []
+    for line in header.splitlines():
+        stripped = line.strip()
+
+        # Skip pure block comment delimiter lines like '/**', '/*', '*/'
+        if stripped in ("/**", "/*", "*/"):
+            continue
+
+        # If block comment delimiters are on the same line as text, strip them
+        if stripped.startswith("/**") or stripped.startswith("/*"):
+            stripped = re.sub(r"^/\*+\s*", "", stripped)
+        if stripped.endswith("*/"):
+            stripped = re.sub(r"\s*\*+/$", "", stripped)
+
+        # Remove leading '*' (Javadoc style) and following space
+        if stripped.startswith("*"):
+            stripped = stripped[1:].lstrip()
+
+        # Handle single-line comment style: // ...
+        if stripped.startswith("//"):
+            stripped = stripped[2:].lstrip()
+
+        lines.append(stripped)
+
+    # Join and normalize all whitespace to single spaces
+    text = "\n".join(lines)
+    text = re.sub(r"\s+", " ", text).strip()
+    text = remove_years_and_ranges(text)
+    return text
+
+
+def normalize_plain_text(text: str) -> str:
+    """
+    Normalize whitespace in a plain text block.
+    """
+    text = re.sub(r"\s+", " ", text).strip()
+    text = remove_years_and_ranges(text)
+    return text
+
+
+def remove_years_and_ranges(text: str) -> str:
+    """
+    Remove year ranges (e.g., 1999-2022) and single years (e.g., 2024)
+    from the text, then re-normalize whitespace.
+    """
+    # Remove year ranges first
+    text = YEAR_RANGE_RE.sub("", text)
+    # Then remove single years
+    text = YEAR_SINGLE_RE.sub("", text)
+    # Normalize whitespace again after removals
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
 
 def load_normalized_license_header_texts(normalized_license_header_dirs: List[Path]) -> Dict[Path, str]:
