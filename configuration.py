@@ -32,6 +32,7 @@ class Configuration:
     manual_license_headers_normalized_dir = Path(configs.get("MANUAL_LICENSE_HEADERS_NORMALIZED_DIR").data).resolve()
     all_license_headers_dir = [license_headers_dir, manual_license_headers_dir]
     all_license_headers_normalized_dir = [license_headers_normalized_dir, manual_license_headers_normalized_dir]
+    project_name = configs.get("PROJECT_NAME").data
     root_dir = p.parent
 
     # Global instance of file data manager

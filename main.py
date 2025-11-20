@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import os
+import sys
 from pathlib import Path
 from assessment.timer import Timer
 #from assessment.creator import extractor
@@ -18,7 +20,7 @@ timer.start()
 def main() -> None:
     Config.dest_dir.mkdir(parents=True, exist_ok=True)
     extractor.main(Config.source_dir, Config.dest_dir)
-    file_reader.read_all_files_in_directory(Config.dest_dir)
+    file_reader.read_all_files_in_directory(Path(Config.dest_dir, Config.project_name))
     file_release_search.scan_all_files()
     hash_reader.main()
     license_search.search_full_license_text_in_files()
@@ -36,7 +38,7 @@ def main() -> None:
     # DIFF COMPARE SHOULD OUTPUT TOTAL NUMBER OF NEW FILES AND NUMBER OF FILES CHANGED
     # ASSIGN LICENSES VALUES OF PERMISSIBLE AND IMPERMISSIBLE
 
-    file_gen.copy_unresolved_files(Config.dest_dir)
+    file_gen.copy_unresolved_files(Path(Config.dest_dir, Config.project_name))
     data_gen.write_license_data_to_csv("assessment_data.csv")
 
 

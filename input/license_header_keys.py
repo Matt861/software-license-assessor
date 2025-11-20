@@ -109,5 +109,6 @@ multi_license_inclusive_keys = {
 }
 
 other_license_keys = {
-    "VINAY SAJIP", "VINAY SAJIP DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE"
+    "VINAY SAJIP": "VINAY SAJIP DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE",
+    "Portions (C) International Organization for Standardization": "Portions (C) International Organization for Standardization"
 }
