@@ -18,7 +18,7 @@ def write_license_data_to_csv(csv_name):
         writer = csv.writer(f)
 
         # Write header row
-        writer.writerow(["File Name", "License", "Status", "Is Released"])
+        writer.writerow(["File Name", "License", "Status", "Is Released", "Hash"])
 
         # Write data rows
         for file_data in Config.file_data_manager.get_all_file_data():
@@ -37,4 +37,4 @@ def write_license_data_to_csv(csv_name):
                 file_cell = ""
             # common_dir = os.path.commonpath([Config.root_dir, file_data.file_path])
             # rel_file_dir = os.path.relpath(file_data.file_path, common_dir)
-            writer.writerow([file_cell, file_data.license_name, "N/A", file_data.is_released])
+            writer.writerow([file_cell, file_data.license_name, "N/A", file_data.is_released, file_data.file_hash])

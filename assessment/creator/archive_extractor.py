@@ -5,11 +5,22 @@ import tarfile
 from pathlib import Path
 
 
+def _looks_like_hex_hash(name: str) -> bool:
+    """
+    Heuristic: filename looks like a hash (Docker/OCI layers often do this).
+    We treat any reasonably long, all-hex string with no extension as a candidate.
+    """
+    name = name.lower()
+    if not (32 <= len(name) <= 128):
+        return False
+    return all(c in "0123456789abcdef" for c in name)
+
+
 def is_multi_archive(path: Path) -> bool:
     """Return True if this path is treated as a multi-file archive."""
     name = path.name.lower()
 
-    # Common multi-file archives
+    # Common multi-file archives by extension
     if name.endswith((".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".tar.xz", ".txz")):
         return True
     if path.suffix.lower() in {".zip", ".tar"}:
@@ -20,6 +31,17 @@ def is_multi_archive(path: Path) -> bool:
     #   - otherwise -> treat as multi-file archive (e.g., "compress1.gz")
     if path.suffix.lower() == ".gz" and "." not in path.stem:
         return True
+
+    # --- NEW: detect hash-named layer files with no extension that are tar archives ---
+    # Many Docker/OCI layers are stored as tar files with filenames such as:
+    #   "a3b55f0c1c7c4c92f8d8a8c2c8f5fe..." (hex hash, no extension)
+    if path.suffix == "" and _looks_like_hex_hash(path.name):
+        try:
+            if tarfile.is_tarfile(path):
+                return True
+        except Exception:
+            # If anything goes wrong, just don't treat it as a multi archive
+            pass
 
     return False
 
@@ -46,16 +68,16 @@ def strip_multi_suffix(rel_path: Path) -> Path:
     return rel_path.with_suffix("")
 
 
-def safe_extract_tar(tar: tarfile.TarFile, path: Path) -> None:
+def safe_extract_tar(tar_obj: tarfile.TarFile, path: Path) -> None:
     """
     Safely extract a tarfile to 'path' by preventing path traversal.
     """
     path = path.resolve()
-    for member in tar.getmembers():
+    for member in tar_obj.getmembers():
         member_path = (path / member.name).resolve()
         if not str(member_path).startswith(str(path)):
             raise Exception("Unsafe path in tar archive (path traversal attempt)")
-    tar.extractall(path)
+    tar_obj.extractall(path)
 
 
 def safe_extract_zip(zf: zipfile.ZipFile, path: Path) -> None:
@@ -112,8 +134,6 @@ def extract_multi(src_file: Path, dest_root: Path, rel_path: Path) -> None:
                 only = next(iter(top_levels))
                 if only == base_name:
                     # Flatten: extract into the parent of target_dir
-                    # so that "example/..." inside the archive becomes "example/..."
-                    # instead of "example/example/...".
                     target_dir = target_dir.parent
                     target_dir.mkdir(parents=True, exist_ok=True)
 

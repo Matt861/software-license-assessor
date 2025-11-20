@@ -67,3 +67,17 @@ def print_license_header_matches():
             #print(f"{"File name: "}{file_data.file_path}")
             #print(f"{"License name: "}{file_data.license_name}")
     print(f"{"Total files with header that matches license: "}{file_header_license_match_count}")
+
+
+def print_file_extension_counts():
+    file_extension_count_dict = {}
+    for file_data in Config.file_data_manager.get_all_file_data():
+        if file_data.file_extension:
+            if file_data.file_extension in file_extension_count_dict:
+                file_extension_count_dict[file_data.file_extension] += 1
+            else:
+                file_extension_count_dict[file_data.file_extension] = 1
+
+    print("Total file extension counts: ")
+    for extension_type, extension_type_count in file_extension_count_dict.items():
+        print(f"Extension type: {extension_type} Count: {extension_type_count}")

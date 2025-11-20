@@ -107,3 +107,7 @@ multi_license_inclusive_keys = {
     "GPL-3.0-with-autoconf-exception": ["GNU General Public License", "version 3", "Autoconf", "Exception"],
     "GPL-3.0-with-GCC-exception": ["GNU General Public License", "version 3", "GCC", "Exception"]
 }
+
+other_license_keys = {
+    "VINAY SAJIP", "VINAY SAJIP DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE"
+}

@@ -3,6 +3,7 @@ import os
 import shutil
 from pathlib import Path
 from assessment.creator import archive_extractor, compression_extractor
+from assessment.creator.archive_extractor import strip_multi_suffix
 from configuration import Configuration as Config
 
 
@@ -19,6 +20,8 @@ def classify(path: Path) -> str:
         return "single"
     return "none"
 
+
+# ---------- Copy phase (source -> destination, first-level only) ----------
 
 def copy_or_extract_file(src_file: Path, dest_root: Path, rel_path: Path) -> None:
     """
@@ -76,7 +79,7 @@ def extract_nested_archives(dest_root: Path) -> None:
     in-place until no more remain.
 
     - For single-file compression: foo.txt.gz -> foo.txt (and remove .gz)
-    - For multi-file archives:    foo.tar.gz -> foo/ (dir) and remove archive
+    - For multi-file archives:    foo.tar.gz or hash-layer -> dir/ (and remove archive)
     """
     while True:
         changed = False
@@ -87,7 +90,6 @@ def extract_nested_archives(dest_root: Path) -> None:
             for filename in filenames:
                 abs_path = dirpath / filename
                 kind = classify(abs_path)
-
                 if kind == "none":
                     continue
 
@@ -113,6 +115,11 @@ def main(source_dir, dest_dir):
     if source_dir.is_dir():
         # Normal directory: copy + first-level extraction, then nested extraction
         copy_tree_with_extraction(source_dir, dest_dir)
+        rel_path = Path(source_dir.name)
+        target_dir_rel = strip_multi_suffix(rel_path)
+        target_dir = dest_dir / target_dir_rel
+        # Second phase: extract all nested archives/compressed files in-place
+        extract_nested_archives(target_dir)
 
     elif source_dir.is_file():
         # Top-level is a single file (could be archive/compressed/normal):
@@ -120,9 +127,13 @@ def main(source_dir, dest_dir):
         # then run nested extraction on whatever it produced.
         rel_path = Path(source_dir.name)
         copy_or_extract_file(source_dir, dest_dir, rel_path)
+        target_dir_rel = strip_multi_suffix(rel_path)
+        target_dir = dest_dir / target_dir_rel
+        # Second phase: extract all nested archives/compressed files in-place
+        extract_nested_archives(target_dir)
 
     else:
         raise ValueError(f"Source path {source_dir} is neither a file nor a directory")
 
-    # Second phase: extract all nested archives/compressed files in-place
-    extract_nested_archives(dest_dir)
+    # # Second phase: extract all nested archives/compressed files in-place
+    # extract_nested_archives(dest_dir)
